@@ -1,5 +1,5 @@
-use rocket_contrib::Json;
 use crate::models::Expense;
+use rocket_contrib::Json;
 
 fn mock_expenses() -> Vec<Expense> {
     vec![
@@ -7,13 +7,13 @@ fn mock_expenses() -> Vec<Expense> {
             id: String::from(":silane_pedro"),
             from: String::from(":silane"),
             to: String::from(":pedro"),
-            amount: 38640
+            amount: 38640,
         },
         Expense {
             id: String::from(":maia_pedro"),
             from: String::from(":maia"),
             to: String::from(":pedro"),
-            amount: 40000
+            amount: 40000,
         },
     ]
 }
