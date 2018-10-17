@@ -1,5 +1,5 @@
 use crate::models::Expense;
-use rocket_contrib::Json;
+use crate::responses::Response;
 
 fn mock_expenses() -> Vec<Expense> {
     vec![
@@ -19,6 +19,7 @@ fn mock_expenses() -> Vec<Expense> {
 }
 
 #[get("/")]
-pub fn all_expenses() -> Json<Vec<Expense>> {
-    Json(mock_expenses())
+pub fn all_expenses() -> Response<Vec<Expense>> {
+    let data = mock_expenses();
+    Response::get(data)
 }

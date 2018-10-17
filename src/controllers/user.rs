@@ -1,5 +1,5 @@
 use crate::models::User;
-use rocket_contrib::Json;
+use crate::responses::Response;
 
 fn mock_users() -> Vec<User> {
     vec![
@@ -19,14 +19,14 @@ fn mock_users() -> Vec<User> {
 }
 
 #[get("/")]
-pub fn all_users() -> Json<Vec<User>> {
-    Json(mock_users())
+pub fn all_users() -> Response<Vec<User>> {
+    Response::get(mock_users())
 }
 
 #[get("/<id>")]
-pub fn user_by_id(id: String) -> Option<Json<User>> {
+pub fn user_by_id(id: String) -> Option<Response<User>> {
     match mock_users().into_iter().find(|u| u.id == id) {
-        Some(user) => Some(Json(user)),
+        Some(user) => Some(Response::get(user)),
         None => None,
     }
 }
