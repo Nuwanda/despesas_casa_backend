@@ -11,7 +11,11 @@ extern crate serde_derive;
 
 fn main() {
     rocket::ignite()
-        .catch(catchers![responses::catchers::not_found])
+        .catch(catchers![
+            responses::catchers::bad_request,
+            responses::catchers::not_found,
+            responses::catchers::internal_error
+        ])
         .mount(
             "/user",
             routes![controllers::user::all_users, controllers::user::user_by_id],
