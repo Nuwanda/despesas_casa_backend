@@ -2,12 +2,23 @@ use rocket::request::Request;
 use rocket::response::{Responder, Result};
 use rocket_contrib::Json;
 use serde::Serialize;
+use std::time::{Duration, SystemTime, UNIX_EPOCH};
+
+fn now() -> u64 {
+    SystemTime::now()
+        .duration_since(UNIX_EPOCH)
+        .unwrap_or(Duration::new(5, 0))
+        .as_secs()
+}
 
 #[derive(Debug, Serialize)]
 pub struct Response<T: Serialize> {
     pub status: i32,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub data: Option<T>,
+    #[serde(skip_serializing_if = "Option::is_none")]
     pub error_message: Option<String>,
+    pub time: u64,
 }
 
 impl<T: Serialize> Response<T> {
@@ -16,6 +27,7 @@ impl<T: Serialize> Response<T> {
             status: 200,
             data: Some(data),
             error_message: None,
+            time: now(),
         }
     }
 
@@ -23,27 +35,21 @@ impl<T: Serialize> Response<T> {
         Response::new(data)
     }
 
-    /* pub fn put(data: T) -> Response<T> {
-        Response::new(data)
-    }
-    
-    pub fn delete(data: T) -> Response<T> {
-        Response::new(data)
-    }
-    
     pub fn post(data: T) -> Response<T> {
         Response {
             status: 201,
             data: Some(data),
             error_message: None,
+            time: now(),
         }
-    } */
+    }
 
-    pub fn error(code: i32, message: String) -> Response<T> {
+    pub fn error(status: i32, message: String) -> Response<T> {
         Response {
-            status: code,
+            status,
             data: None,
             error_message: Some(message),
+            time: now(),
         }
     }
 }

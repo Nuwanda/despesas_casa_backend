@@ -2,7 +2,8 @@ use crate::responses::Response;
 use rocket::request::Request;
 
 #[catch(400)]
-pub fn bad_request(_req: &Request) -> Response<String> {
+pub fn bad_request(req: &Request) -> Response<String> {
+    print!("{}", req);
     Response::error(400, String::from("Invalid entity"))
 }
 

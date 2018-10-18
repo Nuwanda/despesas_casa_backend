@@ -20,6 +20,12 @@ fn main() {
             "/user",
             routes![controllers::user::all_users, controllers::user::user_by_id],
         )
-        .mount("/expense", routes![controllers::expense::all_expenses])
+        .mount(
+            "/expense",
+            routes![
+                controllers::expense::all_expenses,
+                controllers::expense::create_expense
+            ],
+        )
         .launch();
 }
