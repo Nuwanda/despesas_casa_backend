@@ -1,7 +1,7 @@
 [package]
-name = "rust-test"
+name = "despesas-casa-backend"
 version = "0.1.0"
-authors = ["pedro-lopes-avnoconn <pedro.lopes@avnoconn.com>"]
+authors = ["nuwanda <plopes@ua.pt>"]
 edition = "2018"
 
 [dependencies]
