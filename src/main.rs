@@ -1,19 +1,21 @@
 #![feature(plugin)]
 #![plugin(rocket_codegen)]
 
-mod controllers;
-mod models;
-mod responses;
-
 extern crate rocket;
 #[macro_use]
 extern crate serde_derive;
 
-// TODO: Just for testing, remove later when we connect to a DB
 use self::models::{Expense, User};
+// TODO: Just for testing, remove later when we connect to a DB
+use std::sync::Mutex;
+
+mod controllers;
+mod models;
+mod responses;
+
 pub struct DB {
-    users: Vec<User>,
-    expenses: Vec<Expense>,
+    users: Mutex<Vec<User>>,
+    expenses: Mutex<Vec<Expense>>,
 }
 
 fn main() {
@@ -35,7 +37,7 @@ fn main() {
             ],
         )
         .manage(DB {
-            users: vec![
+            users: Mutex::new(vec![
                 User {
                     id: String::from(":pedro"),
                     name: String::from("Pedro"),
@@ -48,8 +50,8 @@ fn main() {
                     id: String::from(":maia"),
                     name: String::from("Maia"),
                 },
-            ],
-            expenses: vec![
+            ]),
+            expenses: Mutex::new(vec![
                 Expense {
                     id: String::from(":silane_pedro"),
                     from: String::from(":silane"),
@@ -62,7 +64,7 @@ fn main() {
                     to: String::from(":pedro"),
                     amount: 40000,
                 },
-            ],
+            ]),
         })
         .launch();
 }

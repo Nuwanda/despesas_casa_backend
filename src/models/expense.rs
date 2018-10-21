@@ -11,19 +11,17 @@ impl Expense {
         let mut includes_source: bool = false;
         let mut includes_destination: bool = false;
 
-        println!("THIS || from: {}, to: {}", self.from, self.to);
-        println!("OTHER || from: {}, to: {}", other.from, other.to);
         if self.from == other.from || self.from == other.to {
             includes_source = true;
         }
-        if self.to == other.from || self.to == other.from {
+        if self.to == other.from || self.to == other.to {
             includes_destination = true;
         }
 
         includes_source && includes_destination
     }
 
-    pub fn update_from_other(&self, other: &Expense) -> Expense {
+    pub fn update_from_other(&mut self, other: &Expense) {
         let amount = if self.from == other.from {
             self.amount + other.amount
         } else {
@@ -31,17 +29,12 @@ impl Expense {
         };
 
         if amount > 0 {
-            Expense {
-                amount,
-                ..self.clone()
-            }
+            self.amount = amount;
         } else {
-            Expense {
-                from: self.to.clone(),
-                to: self.from.clone(),
-                amount: amount * -1,
-                ..self.clone()
-            }
+            let temp = self.from.clone();
+            self.from = self.to.clone();
+            self.to = temp;
+            self.amount = amount * -1;
         }
     }
 }

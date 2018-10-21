@@ -7,7 +7,7 @@ use serde_json::Error as SerdeError;
 
 #[get("/")]
 pub fn all_expenses(db: State<DB>) -> Response<Vec<Expense>> {
-    Response::get(db.expenses.clone())
+    Response::get(db.expenses.lock().unwrap().clone())
 }
 
 #[post("/", data = "<raw_expense>")]
@@ -27,19 +27,13 @@ pub fn create_expense(
         );
     }
 
-    let expenses: Vec<Expense> = db
-        .expenses
-        .iter()
-        .map(|e| {
-            if e.is_earlier_version(&expense) {
-                e.update_from_other(&expense)
-            } else {
-                e.clone()
-            }
-        })
-        .collect();
+    let mut expenses = db.expenses.lock().unwrap();
 
-    print!("{:#?}", expenses);
+    for e in expenses.iter_mut() {
+        if e.is_earlier_version(&expense) {
+            e.update_from_other(&expense);
+        }
+    }
 
     Response::post(expense)
 }

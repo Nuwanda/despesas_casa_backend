@@ -22,9 +22,9 @@ pub struct Response<T: Serialize> {
 }
 
 impl<T: Serialize> Response<T> {
-    fn new(data: T) -> Response<T> {
+    fn new(status: i32, data: T) -> Response<T> {
         Response {
-            status: 200,
+            status,
             data: Some(data),
             error_message: None,
             time: now(),
@@ -32,16 +32,11 @@ impl<T: Serialize> Response<T> {
     }
 
     pub fn get(data: T) -> Response<T> {
-        Response::new(data)
+        Response::new(200, data)
     }
 
     pub fn post(data: T) -> Response<T> {
-        Response {
-            status: 201,
-            data: Some(data),
-            error_message: None,
-            time: now(),
-        }
+        Response::new(201, data)
     }
 
     pub fn error(status: i32, message: String) -> Response<T> {
