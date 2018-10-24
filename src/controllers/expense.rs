@@ -12,7 +12,7 @@ pub fn all_expenses(db: State<DB>) -> Response<Vec<Expense>> {
 pub fn create_expense(raw_expense: SerdeResult<Expense>, db: State<DB>) -> Response<Expense> {
     let expense = match raw_expense {
         Ok(expense) => expense.into_inner(),
-        Err(ref error) => return Response::error(400, format!("{}", error)),
+        Err(error) => return Response::error(400, format!("{}", error)),
     };
 
     if expense.from == expense.to {
