@@ -1,6 +1,6 @@
-#![feature(plugin)]
-#![plugin(rocket_codegen)]
+#![feature(proc_macro_hygiene, decl_macro)]
 
+#[macro_use]
 extern crate rocket;
 #[macro_use]
 extern crate serde_derive;
@@ -20,7 +20,7 @@ pub struct DB {
 
 fn main() {
     rocket::ignite()
-        .catch(catchers![
+        .register(catchers![
             responses::catchers::bad_request,
             responses::catchers::not_found,
             responses::catchers::internal_error

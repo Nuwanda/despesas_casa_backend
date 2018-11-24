@@ -1,7 +1,8 @@
-use crate::models::{Expense, SerdeResult};
+use crate::models::{Expense, JsonResult};
 use crate::responses::Response;
 use crate::DB;
 use rocket::State;
+use rocket_contrib::json::JsonError;
 
 #[get("/")]
 pub fn all_expenses(db: State<DB>) -> Response<Vec<Expense>> {
@@ -9,10 +10,11 @@ pub fn all_expenses(db: State<DB>) -> Response<Vec<Expense>> {
 }
 
 #[post("/", data = "<raw_expense>")]
-pub fn create_expense(raw_expense: SerdeResult<Expense>, db: State<DB>) -> Response<Expense> {
+pub fn create_expense(raw_expense: JsonResult<Expense>, db: State<DB>) -> Response<Expense> {
     let expense = match raw_expense {
         Ok(expense) => expense.into_inner(),
-        Err(error) => return Response::error(400, format!("{}", error)),
+        Err(JsonError::Io(err)) => return Response::error(500, err.to_string()),
+        Err(JsonError::Parse(_data, err)) => return Response::error(422, err.to_string()),
     };
 
     if expense.from == expense.to {

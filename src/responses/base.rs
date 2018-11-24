@@ -1,13 +1,13 @@
 use rocket::request::Request;
 use rocket::response::{Responder, Result};
-use rocket_contrib::Json;
+use rocket_contrib::json::Json;
 use serde::Serialize;
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::time::{SystemTime, UNIX_EPOCH};
 
 fn now() -> u64 {
     SystemTime::now()
         .duration_since(UNIX_EPOCH)
-        .unwrap_or(Duration::new(5, 0))
+        .unwrap()
         .as_secs()
 }
 

@@ -13,6 +13,7 @@ pub fn not_found(_req: &Request) -> Response<String> {
 }
 
 #[catch(500)]
-pub fn internal_error(_req: &Request) -> Response<String> {
+pub fn internal_error(req: &Request) -> Response<String> {
+    print!("{}", req);
     Response::error(500, String::from("Internal error"))
 }
