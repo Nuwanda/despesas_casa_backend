@@ -2,3 +2,5 @@
 /target
 **/*.rs.bk
 *.iml
+*.sqlite
+/src/domain.services/database/schema.rs
