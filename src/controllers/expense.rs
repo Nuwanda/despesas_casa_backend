@@ -58,9 +58,9 @@ pub fn create_expense(raw_expense: JsonResult<NewExpense>, conn: DbConn) -> Resp
             .values(&expenses_for_users)
             .execute(&conn as &diesel::SqliteConnection)?;
 
-        return Ok(expense);
+        Ok(expense)
     }) {
-        Ok(expense) => return Response::post(expense),
-        Err(err) => return Response::error(500, err.to_string()),
+        Ok(expense) => Response::post(expense),
+        Err(err) => Response::error(500, err.to_string()),
     }
 }
